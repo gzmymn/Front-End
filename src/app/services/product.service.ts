@@ -1,18 +1,26 @@
 import { HttpClient } from '@angular/common/http'; //backend'deki dataya ulaşmak için-API call
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ProductResponseModel } from '../models/productResponseModel';
+import { ListResponseModel } from '../models/listResponseModel';
+import { Product } from '../models/product';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  apiUrl ="https://localhost:44351/api/products/getall";
+  apiUrl ="https://localhost:44351/api/"; //bu standart adresim
 
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient) { } //AppModule'de import etmemiz gerekiyor
 
-  getProducts():Observable<ProductResponseModel> { //Observabel:
-    return this.httpClient.get<ProductResponseModel>(this.apiUrl);
+  getProducts():Observable<ListResponseModel<Product>> { //Observabel:
+    let newPath =  this.apiUrl + "products/getall"
+    return this.httpClient.get<ListResponseModel<Product>>(newPath);
+  }
+
+  getProductsByCategory(categoryId:number):Observable<ListResponseModel<Product>> { 
+    let newPath =  this.apiUrl + "products/getbycategory?categoryId="+categoryId
+    return this.httpClient.get<ListResponseModel<Product>>(newPath);
   }
 }
